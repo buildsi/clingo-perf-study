@@ -1,0 +1,12 @@
+autoconf
+automake
+cmake
+flex
+gawk
+gmake
+libtool
+m4
+pkg-config
+pkgconf
+
+

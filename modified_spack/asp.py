@@ -1660,13 +1660,6 @@ class SpackSolverSetup(object):
 
         self.len_pkgs = len(pkgs)
 
-        if len(pkgs) > 400 and ('mpi' not in pkgs):
-            print('^^^ Over 400, mpi not in')
-            self.len_pkgs = -1
-        if len(pkgs) <= 400 and 'mpi' in pkgs:
-            print('^^^ Below 400, mpi in')
-            self.len_pkgs = -2
-
         # driver is used by all the functions below to add facts and
         # rules to generate an ASP program.
         self.gen = driver

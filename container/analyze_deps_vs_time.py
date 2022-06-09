@@ -32,7 +32,7 @@ df_deps = df_full
 fig, axs = plt.subplots(figsize=(6, 6), dpi=150)  
 
 df.plot.scatter(x="dep_len", y="total", ax=axs)
-axs.set_xlabel('Number of dependencies', fontsize=20)
+axs.set_xlabel('Number of possible dependencies', fontsize=20)
 axs.set_ylabel('Time [s]', fontsize=20)
 fig.savefig("total_time_vs_deps.png")
 

@@ -24,7 +24,7 @@ jobs:
 
       # Setup tags to be used for docker images
       - name: Compute labels and tags
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         id: docker_meta
         with:
           images: ghcr.io/${{ github.repository_owner }}/clingo-performance-study

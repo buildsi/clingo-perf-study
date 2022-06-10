@@ -14,18 +14,20 @@ Run concretization tests on specs from an input file. Output the results in csv 
 
 SOLUTION_PHASES = 'setup', 'load', 'ground', 'solve'
 
+VALID_CONFIGURATIONS = 'tweety', 'handy', 'trendy', 'many'
+
 # Basic command line options
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 parser.add_argument('-r', '--repetitions', type=int, help='number of repetitions for each spec', default=1)
 parser.add_argument('--no-cores', dest='cores', action='store_false', help='disable cores in clingo')
 parser.add_argument('-o', '--output', help='CSV output file', required=True)
 parser.add_argument('--reuse', help='maximum reuse of buildcaches and installations', action='store_true')
+parser.add_argument('--configs', help='comma separated clingo configurations', default='tweety')
 parser.add_argument('specfile', help='text file with one spec per line')
 args = parser.parse_args()
-
-
-# configs = ['tweety', 'handy', 'trendy', 'many']
-configs = ['tweety']
+configs = args.configs.split(',')
+if any(x not in VALID_CONFIGURATIONS for x in configs):
+    print("Invalid configuration. Valid options are {0}".format(', '.join(VALID_CONFIGURATIONS)))
 
 # Warmup spack to ensure caches have been written, and clingo is ready
 # (we don't want to measure bootstrapping time)

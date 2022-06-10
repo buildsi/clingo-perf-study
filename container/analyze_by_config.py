@@ -6,7 +6,7 @@ import glob
 import re
 import matplotlib.pyplot as plt
 
-DESCRIPTION = """Analyze CSV files"""
+DESCRIPTION = """Produce histogram plots of the execution time vs. number of packages. A PNG file per clingo configuration is produced"""
 
 SOLUTION_PHASES = 'setup', 'load', 'ground', 'solve'
 

@@ -1,7 +1,18 @@
-This image permits to reproduce smaller scale results similar to the full analysis
-conducted on the full Spack built-in repository.
+# Reproducing smaller scale analysis with a container
 
-There's one script to produce CSV data from concretization:
+The `ghcr.io/buildsi/clingo-performance-study` image
+permits to reproduce similar results as the one conducted
+on the full Spack built-in repository. To get the image and
+run it interactively just:
+```console
+$ docker pull ghcr.io/buildsi/clingo-performance-study:latest
+$ docker run -it ghcr.io/buildsi/clingo-performance-study:latest
+root@451285db7312:/opt/sc22/experiments#
+```
+
+## Description of the image content
+
+In the image we'll find one script to produce CSV data from concretization:
 ```console
 # spack python asp_solve.py -h
 usage: asp_solve.py [-h] [-r REPETITIONS] [--no-cores] -o OUTPUT [--reuse]
@@ -24,8 +35,8 @@ optional arguments:
   --reuse               maximum reuse of buildcaches and installations
   --configs CONFIGS     comma separated clingo configurations
 ```
-this script must be run using `spack python` to setup the Python configuration for
-using Spack core Python packages. It's only mandatory inputs are:
+This script must be run using `spack python` to load automatically a few
+Spack core Python packages that will be benchmarked. Its only mandatory inputs are:
 1. The name of the output file, passed with the `--output` argument
 2. The name of the input file to process
 
@@ -35,7 +46,7 @@ inputs already prepared for convenience:
 - `radiuss.list` is slightly larger, with 26 specs
 - `e4s.list` is the largest, with 94 specs
 
-The full analysis targets thousands of packages in the built-in repository.
+The full analysis done in the paper targets thousands of packages in the built-in repository.
 
 There are then a few scripts that produce different PNG images out of the CSV files.
 These scripts can be run directly with the Python interpreter:
@@ -52,7 +63,7 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-## Example: create a CSV file for Radiuss timing 4 different clingo configurations
+### Example: create a CSV file for Radiuss timing 4 different clingo configurations
 
 Running the following command:
 ```console
@@ -90,7 +101,7 @@ we are able to produce timings for 4 different clingo configurations in a file c
 radiuss.csv
 ```
 
-## Example: create a scatter plot from the previous analysis
+### Example: create a scatter plot from the previous analysis
 
 To create a scatter plot of the "Total execution time" vs. "Number of possible dependencies" we can:
 ```console
@@ -108,3 +119,24 @@ This will produce a PNG file in the current folder:
 total_time_vs_deps.png
 ```
 This image can be copied out of the container to be viewed.
+
+# Real analysis performed in the paper
+
+For the full scale analysis we used modified versions of the script in the container. The
+modification consists in the use of MPI4PY to distribute the work among different nodes in
+a cluster, in order to speed-up the analysis.
+
+Relevant files have been stored in this repository and are:
+
+- `asp_solve_bench.py` - Modified `asp_solve.py` that uses MPI4Py to benchmark Clingo solving times for all the current packages in Spack.
+- `pkg_list.txt` - A list of current packages (should be updated from time to time). Easier to read the packages of from the list (rather than scan Spack's package directory / git) when running benchmarks.
+- `Analyze_results.ipynb` - Jupyter notebook for analyzing the results and producing plots.
+- `quartz` subdirectory:
+    - `batch_run.sh` - A script to run the benchmarking (so far only on Quartz).
+    - `*.csv` - Results from the last benchmarking run (on Quartz). The columns are: package name, Clingo conf name, benchmark repetition number, setup time, load time, ground time, solve time, and total time. All the times are in seconds.
+    - `*.png` - Plots produced from the current results.
+    - `sizes_db.csv` - Number of lines in the fact and grounded files per each package.
+- `lassen` subdirectory:
+    - `*.csv` - Results from the last benchmarking run (on Lassen). The columns are: package name, Clingo conf name, benchmark repetition number, setup time, load time, ground time, solve time, and total time. All the times are in seconds.
+    - `*.png` - Plots produced from the current results.
+    - `sizes_db.csv` - Number of lines in the fact and grounded files per each package.

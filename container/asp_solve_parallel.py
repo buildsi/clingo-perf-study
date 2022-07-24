@@ -7,7 +7,7 @@ import os
 import sys
 import warnings
 
-import tqdm
+import tqdm.contrib.concurrent
 
 import spack.cmd
 import spack.cmd.pkg
@@ -58,9 +58,7 @@ for idx, pkg in enumerate(pkg_ls):
             input_list.append(item)
 
 # Perform the concretization tests
-with multiprocessing.Pool(processes=args.nprocess) as pool:    
-    pkg_stats = list(tqdm.tqdm(pool.imap(mpscript.process_single_item, input_list), total=len(input_list)))
-
+pkg_stats = tqdm.contrib.concurrent.process_map(mpscript.process_single_item, input_list, max_workers=args.nprocess)
 pkg_stats = [x for x in pkg_stats if x is not None]
     
 # Write results to CSV file

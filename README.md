@@ -130,6 +130,15 @@ we are able to produce timings for 4 different clingo configurations in a file c
 radiuss.csv
 ```
 
+### Example: create a CSV file for E4S using multiple processes
+
+Running the following command:
+```console
+# spack python asp_solve_parallel.py -n 4 --configs=tweety,handy,many,trendy -o e4s.csv e4s.list
+  5%|███████▊                                                                                                                                                                     | 17/376 [00:46<15:36,  2.61s/it]
+```
+we are able to produce the same timings as above, using 4 processes.
+
 ### Example: create a scatter plot from the previous analysis
 
 To create a scatter plot of the "Total execution time" vs. "Number of possible dependencies" we can:

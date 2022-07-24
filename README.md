@@ -1,8 +1,8 @@
 # Reproducing smaller scale analysis with a container
 
 The `ghcr.io/buildsi/clingo-performance-study` image
-permits to reproduce similar results as the one conducted
-on the full Spack built-in repository. To get the image and
+permits to reproduce results of the same kind of the ones
+appearing in the paper. To get the image and
 run it interactively just:
 ```console
 $ docker pull ghcr.io/buildsi/clingo-performance-study:latest
@@ -40,13 +40,42 @@ Spack core Python packages that will be benchmarked. Its only mandatory inputs a
 1. The name of the output file, passed with the `--output` argument
 2. The name of the input file to process
 
-The input file is a simple text file with one abstract spec per line. There are 3
+The input file is a simple text file with one abstract spec per line. There are 4
 inputs already prepared for convenience:
 - `build-tools.list` is the smallest and contains only 10 specs
 - `radiuss.list` is slightly larger, with 26 specs
-- `e4s.list` is the largest, with 94 specs
+- `e4s.list` is a medium sized example, with 94 specs
+- `full.list` is the full analysis containing 5969 packages
 
-The full analysis done in the paper targets thousands of packages in the built-in repository.
+The full analysis done in the paper targets thousands of packages in the built-in repository,
+and might take a few hours when reproduced in the docker container. For convenience,
+we also added a parallel version of the script in the container:
+```console
+root@ecd657dc1733:/opt/sc22/experiments# spack python asp_solve_parallel.py -h
+usage: asp_solve_parallel.py [-h] [-r REPETITIONS] [--no-cores] -o OUTPUT
+                             [--reuse] [--configs CONFIGS] [-n NPROCESS]
+                             specfile
+
+Run concretization tests on specs from an input file. Output the results in
+csv format.
+
+positional arguments:
+  specfile              text file with one spec per line
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r REPETITIONS, --repetitions REPETITIONS
+                        number of repetitions for each spec
+  --no-cores            disable cores in clingo
+  -o OUTPUT, --output OUTPUT
+                        CSV output file
+  --reuse               maximum reuse of buildcaches and installations
+  --configs CONFIGS     comma separated clingo configurations
+  -n NPROCESS, --nprocess NPROCESS
+                        number of processes to use to produce the results
+```
+The only difference with the serial script above is the possibility to run the analysis using
+multiple processes.
 
 There are then a few scripts that produce different PNG images out of the CSV files.
 These scripts can be run directly with the Python interpreter:

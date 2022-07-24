@@ -58,7 +58,7 @@ for idx, pkg in enumerate(pkg_ls):
             input_list.append(item)
 
 # Perform the concretization tests
-pkg_stats = tqdm.contrib.concurrent.process_map(mpscript.process_single_item, input_list, max_workers=args.nprocess)
+pkg_stats = tqdm.contrib.concurrent.process_map(mpscript.process_single_item, input_list, max_workers=args.nprocess, chunksize=1)
 pkg_stats = [x for x in pkg_stats if x is not None]
     
 # Write results to CSV file

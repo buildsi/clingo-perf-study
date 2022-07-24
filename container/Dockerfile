@@ -5,7 +5,7 @@ WORKDIR /opt/sc22
 ENV PATH=/opt/sc22/spack/bin:${PATH}
 
 # Update python dependencies
-RUN pip install -U pip && pip install pandas numpy matplotlib
+RUN pip install -U pip && pip install pandas numpy matplotlib tqdm
 
 # Checkout the correct version of Spack
 RUN git clone -b v0.17.2 --single-branch https://github.com/spack/spack.git && \
@@ -22,7 +22,8 @@ COPY ./modified_spack/spec.py /opt/sc22/spack/lib/spack/spack/spec.py
 RUN spack solve hdf5
 
 # Copy scripts to reproduce smaller scale experiments
-COPY ./asp_solve.py /opt/sc22/experiments/
+COPY ./asp_solve*.py /opt/sc22/experiments/
+COPY ./mpscript.py /opt/sc22/experiments/
 COPY ./analyze*.py /opt/sc22/experiments/
 COPY ./*.list /opt/sc22/experiments/
 

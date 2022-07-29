@@ -158,6 +158,35 @@ total_time_vs_deps.png
 ```
 This image can be copied out of the container to be viewed.
 
+### Example: compare the old concretizer with the ASP-based concretizer
+
+To compare the old concretizer with the ASP-based concretizer, we need to create CSV data
+files with timings for both:
+```console
+# spack python asp_solve_parallel.py -o full.csv full.list
+# spack python old_solve_parallel.py -o full_old.csv  full.list
+```
+After the data is available we can produce CDF plots:
+```console
+# spack python analyze_old_vs_asp.py full_old.csv full.csv 
+                      pkg  concrete  iter      total
+0                    3dtk      True     0  19.763435
+1                  3proxy      True     0   1.060040
+2                  abduco      True     0   0.055681
+3  abi-compliance-checker      True     0   1.613308
+4              abi-dumper      True     0   1.819048
+                      pkg     cfg  iter     setup      load    ground     solve      total  dep_len
+0                    3dtk  tweety     0  5.733069  0.021333  1.887932  4.313959  12.334170      526
+1                  3proxy  tweety     0  0.286021  0.022896  0.047723  0.017978   0.397128       22
+2                  abduco  tweety     0  0.237749  0.022638  0.023535  0.001426   0.288637        1
+3  abi-compliance-checker  tweety     0  4.151938  0.027763  1.273631  2.331371   7.996720      446
+4              abi-dumper  tweety     0  4.018198  0.021273  1.260120  2.323686   7.830463      445
+The old concretizer failed on 428 packages. Skipping them from the plot.
+
+# ls *.png 
+total_time_old_vs_asp_cdf.png
+```
+
 # Real analysis performed in the paper
 
 For the full scale analysis we used modified versions of the script in the container. The

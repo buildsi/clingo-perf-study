@@ -23,6 +23,7 @@ RUN spack solve hdf5
 
 # Copy scripts to reproduce smaller scale experiments
 COPY ./asp_solve*.py /opt/sc22/experiments/
+COPY ./old_solve*.py /opt/sc22/experiments/
 COPY ./mpscript.py /opt/sc22/experiments/
 COPY ./analyze*.py /opt/sc22/experiments/
 COPY ./*.list /opt/sc22/experiments/

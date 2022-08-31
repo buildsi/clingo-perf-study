@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib import rc
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('text', usetex=True)
 
 labelsize=20
 
@@ -47,10 +48,16 @@ deps = []
 
 df_deps = df_full
 
-fig, axs = plt.subplots(figsize=(6, 6), dpi=150)
+fig, ax = plt.subplots(figsize=(6, 6), dpi=150)
 
-df.plot.scatter(x="dep_len", y=args.variable, ax=axs)
-axs.set_xlabel('Number of dependencies', fontsize=labelsize)
-axs.set_ylabel('Time [s]', fontsize=labelsize)
+fmt = matplotlib.ticker.StrMethodFormatter("{x:.0f}")
+ax.xaxis.set_major_formatter(fmt)
+ax.yaxis.set_major_formatter(fmt)
+
+df.plot.scatter(x="dep_len", y=args.variable, ax=ax)
+ax.set_xlabel('Number of dependencies', fontsize=labelsize)
+ax.set_ylabel('Time [s]', fontsize=labelsize)
+
+fig.tight_layout()
 
 fig.savefig(args.outfile)

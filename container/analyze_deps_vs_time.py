@@ -57,6 +57,7 @@ ax.yaxis.set_major_formatter(fmt)
 df.plot.scatter(x="dep_len", y=args.variable, ax=ax)
 ax.set_xlabel('Number of dependencies', fontsize=labelsize)
 ax.set_ylabel('Time [s]', fontsize=labelsize)
+plt.grid(axis='both', color='0.9')
 
 fig.tight_layout()
 
